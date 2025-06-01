@@ -12,16 +12,31 @@
       background: black;
       overflow: hidden;
       touch-action: none; /* Bloquea gestos comunes en móvil */
+      font-family: sans-serif;
     }
 
     body {
       display: flex;
       justify-content: center;
       align-items: center;
-      /* fondo negro puro, sin imagen */
       background-color: black;
+      position: relative;
+      color: white;
     }
 
+    /* Texto rojo DON'T EXIT */
+    #dontExit {
+      position: absolute;
+      font-size: 3rem;
+      color: red;
+      font-weight: bold;
+      user-select: none;
+      opacity: 1;
+      transition: opacity 0.3s ease-out;
+      pointer-events: none; /* No interfiere con eventos */
+    }
+
+    /* Imagen */
     img.fade-img {
       opacity: 0;
       transition: opacity 1s ease-in;
@@ -46,6 +61,8 @@
 </head>
 <body>
 
+  <div id="dontExit">DON'T EXIT</div>
+
   <audio id="audio" autoplay>
     <source src="integrity-curious-moonglitch-ogg.mp3" type="audio/mpeg" />
     Tu navegador no soporta audio HTML5.
@@ -54,19 +71,24 @@
   <img id="fadeImage" class="fade-img" src="5d61ac24-4174-4a35-bac9-94b69c832d65.png" alt="Imagen animada" />
 
   <script>
-    // Mostrar imagen con fade-in tras 0.5 segundos
+    const dontExitText = document.getElementById('dontExit');
+    const img = document.getElementById('fadeImage');
+
+    // Desaparece texto DON'T EXIT a los 400ms (fade out)
     setTimeout(() => {
-      document.getElementById('fadeImage').classList.add('visible');
+      dontExitText.style.opacity = '0';
+    }, 400);
+
+    // Aparece imagen a los 500ms (fade in)
+    setTimeout(() => {
+      img.classList.add('visible');
     }, 500);
 
     const audio = document.getElementById('audio');
-    const img = document.getElementById('fadeImage');
 
+    // Al terminar el audio, fade out imagen y redirige
     audio.onended = () => {
-      // Hacer fade-out a la imagen y luego redirigir
       img.classList.add('fade-out');
-
-      // Esperar el tiempo de la transición (1s)
       setTimeout(() => {
         window.location.href = "https://alfonsorv69.github.io/gato/";
       }, 1000);
