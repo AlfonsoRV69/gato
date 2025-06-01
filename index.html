@@ -21,6 +21,7 @@
       padding: 20px;
       gap: 24px;
       color: #fff;
+      position: relative;
     }
     /* Texto con efecto arcoiris animado */
     .rainbow-text {
@@ -37,6 +38,7 @@
       text-align: center;
       width: 100%;
       max-width: 400px;
+      margin-bottom: 10px;
     }
 
     @keyframes rainbow {
@@ -74,15 +76,34 @@
       box-shadow: 0 4px 8px rgba(255, 179, 0, 0.6);
       transform: translateY(0);
     }
+
+    /* Texto fijo en esquina inferior derecha */
+    .footer-text {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      color: rgba(255 255 255 / 0.7);
+      font-size: 0.85rem;
+      font-family: 'Roboto', sans-serif;
+      user-select: none;
+      line-height: 1.3;
+      white-space: nowrap;
+      text-shadow: 0 0 3px rgba(0,0,0,0.4);
+    }
   </style>
 </head>
 <body>
 
-  <div class="rainbow-text">Your gift Laura</div>
+  <div class="rainbow-text">Texto Arcoiris Animado</div>
 
   <mw-button raised id="btn1">1</mw-button>
   <mw-button raised id="btn2">2</mw-button>
   <mw-button raised id="btn3">3</mw-button>
+
+  <div class="footer-text">
+    Made by: Monchito<br />
+    Hosted by: Github
+  </div>
 
   <script>
     document.getElementById('btn1').addEventListener('click', () => {
