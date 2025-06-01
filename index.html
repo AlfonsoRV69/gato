@@ -24,40 +24,6 @@
       overflow: hidden;
     }
 
-    .emoji-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
-    }
-
-    .emoji {
-      position: absolute;
-      font-size: 2rem;
-      animation: fall linear infinite;
-      opacity: 0.8;
-      user-select: none;
-      pointer-events: none; /* Crucial para no bloquear clicks */
-    }
-
-    @keyframes fall {
-      0% {
-        transform: translateY(-10%);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.8;
-      }
-      100% {
-        transform: translateY(110vh);
-        opacity: 0;
-      }
-    }
-
     .rainbow-text {
       font-size: 3rem;
       font-weight: bold;
@@ -65,8 +31,8 @@
       background-size: 400% 400%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-fill-color: transparent;
+              background-clip: text;
+              text-fill-color: transparent;
       animation: rainbow 6s linear infinite;
       user-select: none;
       text-align: center;
@@ -109,6 +75,7 @@
       box-shadow: 0 10px 20px rgba(255, 179, 0, 0.8);
       transform: translateY(-2px);
     }
+
     mw-button:active {
       box-shadow: 0 4px 8px rgba(255, 179, 0, 0.6);
       transform: translateY(0);
@@ -127,17 +94,86 @@
       text-shadow: 0 0 3px rgba(0,0,0,0.4);
       z-index: 1;
     }
+
+    /* Emojis animados */
+    #emoji-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .emoji {
+      position: absolute;
+      top: -2rem;
+      animation: fall linear infinite;
+      opacity: 0.9;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
+    /* Pantalla de inicio */
+    #start-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(8px);
+      background-color: rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      transition: opacity 0.5s ease;
+    }
+
+    #start-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #start-button {
+      font-size: 2rem;
+      padding: 20px 40px;
+      border: none;
+      border-radius: 20px;
+      background-color: #FFD54F;
+      color: #000;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+
+    #start-button:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
+  <!-- Emojis animados -->
+  <div id="emoji-container"></div>
 
-  <div class="emoji-container" id="emoji-container"></div>
+  <!-- Pantalla de inicio -->
+  <div id="start-screen">
+    <button id="start-button">Start</button>
+  </div>
 
+  <!-- Contenido principal -->
   <div class="rainbow-text">Your gift Laura</div>
 
-  <mw-button raised id="btn1">1</mw-button>
-  <mw-button raised id="btn2">2</mw-button>
-  <mw-button raised id="btn3">3</mw-button>
+  <mw-button raised id="btn1" disabled>1</mw-button>
+  <mw-button raised id="btn2" disabled>2</mw-button>
+  <mw-button raised id="btn3" disabled>3</mw-button>
 
   <div class="footer-text">
     Made by: Monchito<br />
@@ -156,15 +192,30 @@
       emoji.style.animationDuration = (4 + Math.random() * 3) + 's';
       emoji.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
       container.appendChild(emoji);
-
-      setTimeout(() => {
-        emoji.remove();
-      }, 8000);
+      setTimeout(() => emoji.remove(), 8000);
     }
 
-    setInterval(createEmoji, 300); // aparece un emoji nuevo cada 300 ms
+    setInterval(createEmoji, 300);
 
-    // Botones funcionan igual que antes:
+    // Pantalla de inicio
+    const startBtn = document.getElementById('start-button');
+    const startScreen = document.getElementById('start-screen');
+    const buttons = [
+      document.getElementById('btn1'),
+      document.getElementById('btn2'),
+      document.getElementById('btn3')
+    ];
+
+    startBtn.addEventListener('click', () => {
+      startScreen.classList.add('hidden');
+      buttons.forEach(btn => {
+        btn.disabled = false;
+        btn.style.transform = 'scale(1.1)';
+        setTimeout(() => btn.style.transform = '', 200);
+      });
+    });
+
+    // Navegación
     document.getElementById('btn1').addEventListener('click', () => {
       window.location.href = 'sala1.html';
     });
