@@ -37,12 +37,16 @@
 
     img.fade-img {
       opacity: 0;
-      transition: opacity 1s ease-in, transform 0.1s ease;
       max-width: 90%;
       max-height: 90%;
       position: absolute;
       transform-origin: center center;
+      will-change: transform, opacity;
+      transition:
+        opacity 1s ease-in,
+        transform 0.1s ease;
       transform: scale(1);
+      backface-visibility: hidden; /* ayuda a mejorar rendimiento */
     }
 
     img.visible {
@@ -87,13 +91,11 @@
     const audio = document.getElementById('audio');
 
     audio.onended = () => {
-      // 1 segundo antes de desaparecer: zoom rápido jumpscare (scale 1.2 en 0.1s)
-      img.style.transition = 'transform 0.1s ease';
+      // Aplicar zoom jumpscare rápido (scale 1.4) con pequeña transición
+      img.style.transition = 'transform 0.2s ease';
+      img.style.transform = 'scale(1.4)';
 
-      // Ejecutar zoom jumpscare
-      img.style.transform = 'scale(1.2)';
-
-      // Después de 0.1s, comenzar fade-out y resetear transform a normal
+      // Tras 100ms, vuelve a escala 1 y comienza fade-out
       setTimeout(() => {
         img.style.transform = 'scale(1)';
         img.classList.add('fade-out');
