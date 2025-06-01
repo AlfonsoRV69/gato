@@ -22,6 +22,32 @@
       gap: 24px;
       color: #fff;
     }
+    /* Texto con efecto arcoiris animado */
+    .rainbow-text {
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+              background-clip: text;
+              text-fill-color: transparent;
+      animation: rainbow 6s linear infinite;
+      user-select: none;
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    @keyframes rainbow {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 400% 50%;
+      }
+    }
+
     mw-button {
       --md-sys-color-primary: #FFB300;
       --md-sys-color-on-primary: #000000;
@@ -52,9 +78,11 @@
 </head>
 <body>
 
+  <div class="rainbow-text">Your gift Laura</div>
+
   <mw-button raised id="btn1">1</mw-button>
   <mw-button raised id="btn2">2</mw-button>
-  <mw-button raised id="btn3">3</mw-button> <!-- Nuevo botón -->
+  <mw-button raised id="btn3">3</mw-button>
 
   <script>
     document.getElementById('btn1').addEventListener('click', () => {
@@ -66,7 +94,7 @@
     });
 
     document.getElementById('btn3').addEventListener('click', () => {
-      window.location.href = 'sala3.html'; // Cambia a la URL que necesites
+      window.location.href = 'sala3.html';
     });
   </script>
 </body>
