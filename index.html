@@ -65,23 +65,6 @@
       100% { background-position: 400% 50%; }
     }
 
-    /* Brillos flotando */
-    .sparkle {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: white;
-      border-radius: 50%;
-      opacity: 0.8;
-      animation: sparkleMove 3s infinite ease-in-out;
-    }
-
-    @keyframes sparkleMove {
-      0% { transform: translateY(0) scale(1); opacity: 0.8; }
-      50% { transform: translateY(-20px) scale(1.4); opacity: 0.4; }
-      100% { transform: translateY(0) scale(1); opacity: 0.8; }
-    }
-
     mw-button {
       --md-sys-color-primary: #FFB300;
       --md-sys-color-on-primary: #000000;
@@ -207,7 +190,7 @@
     <button id="start-button">Start</button>
   </div>
 
-  <div class="rainbow-text" id="rainbow-text">Your gift</div>
+  <div class="rainbow-text" id="rainbow-text">Your gift Laura</div>
 
   <mw-button raised id="btn1" disabled>1</mw-button>
   <mw-button raised id="btn2" disabled>2</mw-button>
@@ -218,19 +201,6 @@
     Made by: Monchito<br />
     Hosted by: Github
   </div>
-
-  <!-- Sparkles -->
-  <script>
-    for (let i = 0; i < 20; i++) {
-      const sparkle = document.createElement("div");
-      sparkle.className = "sparkle";
-      sparkle.style.left = Math.random() * 100 + "vw";
-      sparkle.style.top = Math.random() * 100 + "vh";
-      sparkle.style.animationDuration = 3 + Math.random() * 2 + "s";
-      sparkle.style.opacity = Math.random();
-      document.body.appendChild(sparkle);
-    }
-  </script>
 
   <script>
     const emojis = ["🎉", "🥳", "🎂", "🎁", "🎊"];
@@ -283,4 +253,8 @@
       window.location.href = 'sala3.html';
     });
     document.getElementById('btn4').addEventListener('click', () => {
-      window
+      window.location.href = 'sala4.html';
+    });
+  </script>
+</body>
+</html>
