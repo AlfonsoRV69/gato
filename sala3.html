@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
   <title>Página bloqueada</title>
   <style>
     html, body {
@@ -18,10 +18,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-image: url('5d61ac24-4174-4a35-bac9-94b69c832d65.png');
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-size: cover;
+      /* fondo negro puro, sin imagen */
+      background-color: black;
     }
 
     img.fade-img {
@@ -36,6 +34,11 @@
       opacity: 1;
     }
 
+    img.fade-out {
+      opacity: 0 !important;
+      transition: opacity 1s ease-out;
+    }
+
     audio {
       display: none;
     }
@@ -44,22 +47,29 @@
 <body>
 
   <audio id="audio" autoplay>
-    <source src="integrity-curious-moonglitch-ogg.mp3" type="audio/mpeg">
+    <source src="integrity-curious-moonglitch-ogg.mp3" type="audio/mpeg" />
     Tu navegador no soporta audio HTML5.
   </audio>
 
-  <img id="fadeImage" class="fade-img" src="5d61ac24-4174-4a35-bac9-94b69c832d65.png" alt="Imagen animada">
+  <img id="fadeImage" class="fade-img" src="5d61ac24-4174-4a35-bac9-94b69c832d65.png" alt="Imagen animada" />
 
   <script>
-    // Mostrar imagen con fade-in tras 0.5s
+    // Mostrar imagen con fade-in tras 0.5 segundos
     setTimeout(() => {
       document.getElementById('fadeImage').classList.add('visible');
     }, 500);
 
-    // Redirigir al terminar el audio
     const audio = document.getElementById('audio');
+    const img = document.getElementById('fadeImage');
+
     audio.onended = () => {
-      window.location.href = "https://alfonsorv69.github.io/gato/";
+      // Hacer fade-out a la imagen y luego redirigir
+      img.classList.add('fade-out');
+
+      // Esperar el tiempo de la transición (1s)
+      setTimeout(() => {
+        window.location.href = "https://alfonsorv69.github.io/gato/";
+      }, 1000);
     };
 
     // Bloqueo básico de salida (solo efectivo en desktop)
@@ -80,5 +90,6 @@
       }
     });
   </script>
+
 </body>
 </html>
