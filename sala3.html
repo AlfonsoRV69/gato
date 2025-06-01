@@ -2,36 +2,38 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Página con fondo fijo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+  <title>Bloqueo</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
+      background: black;
       overflow: hidden;
-      background: #000; /* fondo de respaldo si la imagen no cubre todo */
+      touch-action: none; /* bloquear gestos */
     }
 
     body {
-      background-image: url('5d61ac24-4174-4a35-bac9-94b69c832d65.png');
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-size: auto; /* evita redimensionamiento */
       display: flex;
       justify-content: center;
       align-items: center;
-      color: white;
-      font-family: sans-serif;
-      text-shadow: 2px 2px 4px #000;
+      background-image: url('5d61ac24-4174-4a35-bac9-94b69c832d65.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
     }
 
-    .text {
-      font-size: 2rem;
-      text-align: center;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 12px;
+    img.fade-img {
+      opacity: 0;
+      transition: opacity 1s ease-in;
+      max-width: 90%;
+      max-height: 90%;
+      position: absolute;
+    }
+
+    img.visible {
+      opacity: 1;
     }
 
     audio {
@@ -41,9 +43,52 @@
 </head>
 <body>
 
-  <audio autoplay loop>
+  <audio id="audio" autoplay>
     <source src="integrity-curious-moonglitch-ogg.mp3" type="audio/mpeg">
     Tu navegador no soporta audio HTML5.
   </audio>
+
+  <img id="fadeImage" class="fade-img" src="TU_IMAGEN.png" alt="Imagen" />
+
+  <script>
+    // Mostrar imagen con fade-in tras 0.5s
+    setTimeout(() => {
+      document.getElementById('fadeImage').classList.add('visible');
+    }, 500);
+
+    // Redirigir al terminar audio
+    const audio = document.getElementById('audio');
+    audio.onended = () => {
+      window.location.href = "https://alfonsorv69.github.io/gato/";
+    };
+
+    // Evitar salida en desktop
+    window.addEventListener("beforeunload", (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    });
+
+    // Rechazar atajos peligrosos (funciona en teclado físico)
+    document.addEventListener("keydown", (e) => {
+      const block = ["F5", "F11", "F12"];
+      if (
+        block.includes(e.key) ||
+        (e.ctrlKey && ["r", "w", "t"].includes(e.key.toLowerCase())) ||
+        (e.metaKey && ["r", "w", "t"].includes(e.key.toLowerCase()))
+      ) {
+        e.preventDefault();
+      }
+    });
+
+    // Pedir pantalla completa al tocar (necesario en móviles)
+    document.body.addEventListener("click", async () => {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        await elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        await elem.webkitRequestFullscreen(); // iOS
+      }
+    }, { once: true });
+  </script>
 </body>
 </html>
