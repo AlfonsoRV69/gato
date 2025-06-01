@@ -48,6 +48,7 @@
       border-radius: 12px;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      margin-bottom: 10px;
     }
     button:hover {
       background-color: #e6a300;
@@ -58,10 +59,18 @@
       margin-top: 10px;
       height: 20px;
     }
+    .back-btn {
+      background-color: #ffffff;
+      color: #6750A4;
+    }
+    .back-btn:hover {
+      background-color: #ddd;
+    }
   </style>
 </head>
 <body>
 
+  <!-- Música de fondo con nombre correcto -->
   <audio autoplay loop hidden>
     <source src="lobby-classic-game.mp3" type="audio/mpeg">
     Tu navegador no soporta audio HTML5.
@@ -72,6 +81,9 @@
     <input type="password" id="password" placeholder="Contraseña" />
     <button id="submitBtn">Entrar</button>
     <div class="error" id="errorMsg"></div>
+
+    <!-- Botón para volver -->
+    <button class="back-btn" onclick="window.location.href='https://alfonsorv69.github.io/gato/'">Volver</button>
   </div>
 
   <script>
