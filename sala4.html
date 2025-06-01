@@ -1,48 +1,78 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title></title>
-<style>
-  html, body {
-    margin: 0; padding: 0; height: 100%; width: 100%;
-    overflow: hidden;
-    background: black;
-  }
-  body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
-  img {
-    max-width: 100vw;
-    max-height: 100vh;
-    object-fit: contain;
-    display: block;
-  }
-  /* Botón transparente posicionado sobre el "botón rojo" */
-  .red-button {
-    position: absolute;
-    /* Ajusta la posición abajo-derecha, % o px según necesites */
-    bottom: 10vh; /* 10% del alto desde abajo */
-    right: 10vw;  /* 10% del ancho desde derecha */
-    width: 80px;
-    height: 80px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    z-index: 10;
-  }
-  audio {
-    display: none;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title></title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: black;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    img {
+      max-width: 100vw;
+      max-height: 100vh;
+      object-fit: contain;
+      display: block;
+    }
+    .red-button {
+      position: absolute;
+      bottom: 10%;
+      right: 10%;
+      width: 80px;
+      height: 80px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+      /* Opcional para debugging, puedes eliminar */
+      /* border: 2px solid red; */
+    }
+    audio {
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <img src="https://play-lh.googleusercontent.com/WP_OTgsLGXUBr_gF9mdBEX-2qXwYa1rPzDbwxuQ3KsCzuIujbnOvxf2oS5ra_31YnVA" alt="Imagen principal" />
-  <button class="red-button" aria-label="Botón rojo para redirigir" onclick="window.location.href='https://alfonsorv69.github.io/gato/'"></button>
-  <audio src="italian-brainrot-ringtone.mp3" autoplay loop></audio>
+  <img
+    src="https://play-lh.googleusercontent.com/WP_OTgsLGXUBr_gF9mdBEX-2qXwYa1rPzDbwxuQ3KsCzuIujbnOvxf2oS5ra_31YnVA"
+    alt="Imagen principal"
+  />
+  <button
+    class="red-button"
+    aria-label="Botón rojo para redirigir"
+    onclick="window.location.href='https://alfonsorv69.github.io/gato/'"
+  ></button>
+
+  <audio id="background-audio" src="italian-brainrot-ringtone.mp3" autoplay></audio>
+
+  <script>
+    const audio = document.getElementById("background-audio");
+
+    // Si quieres que también se reproduzca en bucle mientras no haya redirección, quita el comentario de la siguiente línea:
+    // audio.loop = true;
+
+    // Redirigir al terminar la canción
+    audio.addEventListener("ended", () => {
+      window.location.href = "https://alfonsorv69.github.io/gato/";
+    });
+
+    // Extra: iOS requiere interacción para reproducir audio a veces
+    document.addEventListener("click", () => {
+      if (audio.paused) {
+        audio.play().catch(() => {});
+      }
+    });
+  </script>
 </body>
-    </html>
+</html>
