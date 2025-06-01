@@ -3,18 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Página con fondo animado</title>
+  <title>Página con fondo fijo</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
       overflow: hidden;
+      background: #000; /* fondo de respaldo si la imagen no cubre todo */
     }
 
     body {
-      background: url('5d61ac24-4174-4a35-bac9-94b69c832d65.png') no-repeat center center fixed;
-      background-size: cover;
+      background-image: url('5d61ac24-4174-4a35-bac9-94b69c832d65.png');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: auto; /* evita redimensionamiento */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -37,10 +40,9 @@
   </style>
 </head>
 <body>
-  <div class="text">Herobrine jumpscare</div>
 
   <audio autoplay loop>
-    <source src="integrity-curious-moonglitch-ogg.mp3" type="audio/mpeg">
+    <source src="lobby-classic-game.mp3" type="audio/mpeg">
     Tu navegador no soporta audio HTML5.
   </audio>
 </body>
