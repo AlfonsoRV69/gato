@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Material You - Dos Botones Móvil</title>
+  <title>:D</title>
 
   <!-- Importar Material Web Components -->
   <script type="module" src="https://unpkg.com/@material/web@1.0.0/dist/material-web.min.js"></script>
@@ -12,7 +12,7 @@
     body {
       font-family: 'Roboto', sans-serif;
       margin: 0;
-      background-color: #f5f5f5;
+      background: linear-gradient(135deg, #6750A4 0%, #B583F7 100%);
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -20,18 +20,33 @@
       height: 100vh;
       padding: 20px;
       gap: 24px;
-      color: #000;
+      color: #fff;
     }
     mw-button {
-      --md-sys-color-primary: #6750A4;
-      --md-sys-color-on-primary: #FFFFFF;
+      --md-sys-color-primary: #FFB300;
+      --md-sys-color-on-primary: #000000;
       font-size: 2rem;
       width: 80vw;
       max-width: 300px;
       height: 60px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(103, 80, 164, 0.4);
+      border-radius: 16px;
+      box-shadow: 0 6px 12px rgba(255, 179, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
       user-select: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    mw-button:hover,
+    mw-button:focus {
+      box-shadow: 0 10px 20px rgba(255, 179, 0, 0.8);
+      transform: translateY(-2px);
+    }
+    mw-button:active {
+      box-shadow: 0 4px 8px rgba(255, 179, 0, 0.6);
+      transform: translateY(0);
     }
   </style>
 </head>
@@ -42,11 +57,11 @@
 
   <script>
     document.getElementById('btn1').addEventListener('click', () => {
-      window.location.href = '1.html';
+      window.location.href = 'pagina1.html';
     });
 
     document.getElementById('btn2').addEventListener('click', () => {
-      window.location.href = '2.html';
+      window.location.href = 'pagina2.html';
     });
   </script>
 </body>
