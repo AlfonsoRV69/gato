@@ -11,7 +11,7 @@
       height: 100%;
       background: black;
       overflow: hidden;
-      touch-action: none; /* Bloquea gestos comunes en móvil */
+      touch-action: none;
       font-family: sans-serif;
     }
 
@@ -24,7 +24,6 @@
       color: white;
     }
 
-    /* Texto rojo DON'T EXIT */
     #dontExit {
       position: absolute;
       font-size: 3rem;
@@ -33,16 +32,17 @@
       user-select: none;
       opacity: 1;
       transition: opacity 0.3s ease-out;
-      pointer-events: none; /* No interfiere con eventos */
+      pointer-events: none;
     }
 
-    /* Imagen */
     img.fade-img {
       opacity: 0;
-      transition: opacity 1s ease-in;
+      transition: opacity 1s ease-in, transform 0.1s ease;
       max-width: 90%;
       max-height: 90%;
       position: absolute;
+      transform-origin: center center;
+      transform: scale(1);
     }
 
     img.visible {
@@ -86,12 +86,23 @@
 
     const audio = document.getElementById('audio');
 
-    // Al terminar el audio, fade out imagen y redirige
     audio.onended = () => {
-      img.classList.add('fade-out');
+      // 1 segundo antes de desaparecer: zoom rápido jumpscare (scale 1.2 en 0.1s)
+      img.style.transition = 'transform 0.1s ease';
+
+      // Ejecutar zoom jumpscare
+      img.style.transform = 'scale(1.2)';
+
+      // Después de 0.1s, comenzar fade-out y resetear transform a normal
       setTimeout(() => {
-        window.location.href = "https://alfonsorv69.github.io/gato/";
-      }, 1000);
+        img.style.transform = 'scale(1)';
+        img.classList.add('fade-out');
+
+        // Después de 1s de fade-out, redirigir
+        setTimeout(() => {
+          window.location.href = "https://alfonsorv69.github.io/gato/";
+        }, 1000);
+      }, 100);
     };
 
     // Bloqueo básico de salida (solo efectivo en desktop)
