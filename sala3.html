@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
-  <title>Bloqueo</title>
+  <title>Página bloqueada</title>
   <style>
     html, body {
       margin: 0;
@@ -11,7 +11,7 @@
       height: 100%;
       background: black;
       overflow: hidden;
-      touch-action: none; /* bloquear gestos */
+      touch-action: none; /* Bloquea gestos comunes en móvil */
     }
 
     body {
@@ -48,7 +48,7 @@
     Tu navegador no soporta audio HTML5.
   </audio>
 
-  <img id="fadeImage" class="fade-img" src="TU_IMAGEN.png" alt="Imagen" />
+  <img id="fadeImage" class="fade-img" src="5d61ac24-4174-4a35-bac9-94b69c832d65.png" alt="Imagen animada">
 
   <script>
     // Mostrar imagen con fade-in tras 0.5s
@@ -56,39 +56,29 @@
       document.getElementById('fadeImage').classList.add('visible');
     }, 500);
 
-    // Redirigir al terminar audio
+    // Redirigir al terminar el audio
     const audio = document.getElementById('audio');
     audio.onended = () => {
       window.location.href = "https://alfonsorv69.github.io/gato/";
     };
 
-    // Evitar salida en desktop
+    // Bloqueo básico de salida (solo efectivo en desktop)
     window.addEventListener("beforeunload", (e) => {
       e.preventDefault();
       e.returnValue = "";
     });
 
-    // Rechazar atajos peligrosos (funciona en teclado físico)
+    // Bloqueo de teclas peligrosas
     document.addEventListener("keydown", (e) => {
-      const block = ["F5", "F11", "F12"];
+      const bloqueadas = ["F5", "F11", "F12"];
       if (
-        block.includes(e.key) ||
+        bloqueadas.includes(e.key) ||
         (e.ctrlKey && ["r", "w", "t"].includes(e.key.toLowerCase())) ||
         (e.metaKey && ["r", "w", "t"].includes(e.key.toLowerCase()))
       ) {
         e.preventDefault();
       }
     });
-
-    // Pedir pantalla completa al tocar (necesario en móviles)
-    document.body.addEventListener("click", async () => {
-      const elem = document.documentElement;
-      if (elem.requestFullscreen) {
-        await elem.requestFullscreen();
-      } else if (elem.webkitRequestFullscreen) {
-        await elem.webkitRequestFullscreen(); // iOS
-      }
-    }, { once: true });
   </script>
 </body>
 </html>
