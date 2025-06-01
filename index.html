@@ -24,7 +24,6 @@
       overflow: hidden;
     }
 
-    /* Emoji contenedor */
     .emoji-container {
       position: fixed;
       top: 0;
@@ -42,6 +41,7 @@
       animation: fall linear infinite;
       opacity: 0.8;
       user-select: none;
+      pointer-events: none; /* Crucial para no bloquear clicks */
     }
 
     @keyframes fall {
@@ -133,7 +133,7 @@
 
   <div class="emoji-container" id="emoji-container"></div>
 
-  <div class="rainbow-text">Your gift Laura</div>
+  <div class="rainbow-text">Texto Arcoiris Animado</div>
 
   <mw-button raised id="btn1">1</mw-button>
   <mw-button raised id="btn2">2</mw-button>
@@ -141,7 +141,7 @@
 
   <div class="footer-text">
     Made by: Monchito<br />
-    Hosted in: Github
+    Hosted by: Github
   </div>
 
   <script>
@@ -162,7 +162,20 @@
       }, 8000);
     }
 
-    setInterval(createEmoji, 300); // cada 300ms aparece uno nuevo
+    setInterval(createEmoji, 300); // aparece un emoji nuevo cada 300 ms
+
+    // Botones funcionan igual que antes:
+    document.getElementById('btn1').addEventListener('click', () => {
+      window.location.href = 'sala1.html';
+    });
+
+    document.getElementById('btn2').addEventListener('click', () => {
+      window.location.href = 'male2.html';
+    });
+
+    document.getElementById('btn3').addEventListener('click', () => {
+      window.location.href = 'sala3.html';
+    });
   </script>
 </body>
 </html>
