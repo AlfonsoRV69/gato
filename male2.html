@@ -56,11 +56,16 @@
       color: #ff6b6b;
       font-weight: 600;
       margin-top: 10px;
-      height: 20px; /* para evitar salto cuando aparece o desaparece */
+      height: 20px;
     }
   </style>
 </head>
 <body>
+
+  <audio autoplay loop hidden>
+    <source src="musica.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio HTML5.
+  </audio>
 
   <div class="container">
     <h2>Introduce la contraseña</h2>
@@ -76,15 +81,12 @@
       const input = document.getElementById('password').value.trim();
       const errorMsg = document.getElementById('errorMsg');
       if (input === correctPassword) {
-        // Contraseña correcta, redirigir
         window.location.href = 'com3.html';
       } else {
-        // Contraseña incorrecta, mostrar error
         errorMsg.textContent = 'Contraseña incorrecta. Intenta de nuevo.';
       }
     });
 
-    // También para que se pueda enviar con Enter
     document.getElementById('password').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         document.getElementById('submitBtn').click();
