@@ -22,7 +22,22 @@
       color: #fff;
     }
 
-    /* Pantalla de inicio con blur */
+    #main-content {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    #main-content.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
     #start-screen {
       opacity: 0;
       pointer-events: none;
@@ -60,7 +75,6 @@
       pointer-events: none;
     }
 
-    /* Footer siempre visible, fuera del overlay */
     .footer-text {
       position: fixed;
       bottom: 10px;
@@ -91,6 +105,7 @@
       max-width: 400px;
       margin-bottom: 10px;
       z-index: 1;
+      cursor: pointer;
     }
 
     @keyframes rainbow {
@@ -128,7 +143,6 @@
       transform: translateY(0);
     }
 
-    /* Emojis de cumpleaños */
     .emoji {
       position: fixed;
       font-size: 2rem;
@@ -157,40 +171,74 @@
     <button id="start-button">Start</button>
   </div>
 
+  <div id="main-content">
+    <div class="rainbow-text" id="gift-title">Your gift Laura</div>
+    <mw-button raised id="btn1">1</mw-button>
+    <mw-button raised id="btn2">2</mw-button>
+    <mw-button raised id="btn3">3</mw-button>
+    <mw-button raised id="btn4">4</mw-button>
+  </div>
+
+  <img id="gift-image" src="https://em-content.zobj.net/source/google/263/turtle_1f422.png" 
+       alt="Gift Image" style="
+         display: none;
+         width: 120px;
+         position: absolute;
+         top: 20%;
+         z-index: 15;
+         left: 50%;
+         transform: translateX(-50%);
+         opacity: 0;
+         transition: opacity 0.5s ease;
+       " />
+
   <div class="footer-text">
     Made by: Monchito<br />
     Hosted in: Github
   </div>
 
-  <div class="rainbow-text">Your gift Laura</div>
-
-  <mw-button raised id="btn1">1</mw-button>
-  <mw-button raised id="btn2">2</mw-button>
-  <mw-button raised id="btn3">3</mw-button>
-  <mw-button raised id="btn4">4</mw-button>
-
   <script>
     window.addEventListener("DOMContentLoaded", () => {
       const startScreen = document.getElementById("start-screen");
+      const mainContent = document.getElementById("main-content");
+
       setTimeout(() => {
         startScreen.style.opacity = "1";
         startScreen.style.pointerEvents = "auto";
       }, 100);
-    });
 
-    document.getElementById("start-button").addEventListener("click", () => {
-      const startScreen = document.getElementById("start-screen");
-      const startButton = document.getElementById("start-button");
+      document.getElementById("start-button").addEventListener("click", () => {
+        const startButton = document.getElementById("start-button");
+        startButton.classList.add("disappear");
 
-      startButton.classList.add("disappear");
-
-      setTimeout(() => {
-        startScreen.style.opacity = "0";
-        startScreen.style.pointerEvents = "none";
         setTimeout(() => {
-          startScreen.style.display = "none";
-        }, 500);
-      }, 400);
+          startScreen.style.opacity = "0";
+          startScreen.style.pointerEvents = "none";
+          mainContent.classList.add("visible");
+
+          setTimeout(() => {
+            startScreen.style.display = "none";
+          }, 500);
+        }, 400);
+      });
+
+      // Mostrar imagen al hacer clic en el texto
+      const giftTitle = document.getElementById("gift-title");
+      const giftImage = document.getElementById("gift-image");
+
+      giftTitle.addEventListener("click", () => {
+        giftImage.style.display = "block";
+        setTimeout(() => {
+          giftImage.style.opacity = "1";
+        }, 10); // pequeño delay para activar transición
+
+        setTimeout(() => {
+          giftImage.style.opacity = "0";
+          setTimeout(() => {
+            giftImage.style.display = "none";
+          }, 500);
+        }, 1000); // mostrar 1 segundo
+      });
     });
 
     document.getElementById("btn1").addEventListener("click", () => {
@@ -207,7 +255,6 @@
     });
 
     const emojis = ['🎉', '🎁', '🎂', '🥳', '✨'];
-
     function createEmoji() {
       const emoji = document.createElement('div');
       emoji.classList.add('emoji');
