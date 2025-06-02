@@ -215,6 +215,11 @@
     Hosted in: Github
   </div>
 
+  <!-- Audio cargado desde el mismo directorio -->
+  <audio id="turtle-sound" preload="auto">
+    <source src="tortuga (1).mp3" type="audio/mpeg">
+  </audio>
+
   <script>
     window.addEventListener("DOMContentLoaded", () => {
       const startScreen = document.getElementById("start-screen");
@@ -228,19 +233,17 @@
       }, 100);
 
       startButton.addEventListener("click", () => {
-        // Mostrar la imagen y ocultar botón
+        // Mostrar imagen
         startButton.style.display = "none";
         startImage.style.display = "block";
 
-        // Esperar 1 segundo mostrando la imagen
+        // Esperar 1 segundo y luego iniciar
         setTimeout(() => {
-          // Ocultar la imagen y hacer desaparecer el start screen
           startImage.style.display = "none";
           startScreen.style.opacity = "0";
           startScreen.style.pointerEvents = "none";
           mainContent.classList.add("visible");
 
-          // Después de medio segundo ocultar el start screen del DOM
           setTimeout(() => {
             startScreen.style.display = "none";
           }, 500);
@@ -263,12 +266,16 @@
 
     const giftText = document.getElementById('gift-text');
     const turtleImage = document.getElementById('turtle-image');
+    const turtleSound = document.getElementById('turtle-sound');
 
     giftText.addEventListener('click', () => {
       turtleImage.style.display = 'block';
+      turtleSound.currentTime = 0;
+      turtleSound.play().catch(e => console.warn("No se pudo reproducir el sonido:", e));
+
       setTimeout(() => {
         turtleImage.style.display = 'none';
-      }, 6000);
+      }, 6000); // Mostrar durante 6 segundos
     });
 
     const emojis = ['🎉', '🎁', '🎂', '🥳', '✨'];
@@ -286,8 +293,5 @@
 
     setInterval(createEmoji, window.innerWidth < 768 ? 500 : 250);
   </script>
-
 </body>
 </html>
-
-
