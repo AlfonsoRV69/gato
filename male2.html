@@ -74,6 +74,17 @@
       filter: blur(1px);
       pointer-events: none;
     }
+    #jumpscare-img {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+      background: rgba(0,0,0,0.95);
+    }
   </style>
 </head>
 <body>
@@ -88,6 +99,9 @@
     <source src="scaryjumpscare.mp3" type="audio/mpeg">
     Tu navegador no soporta audio HTML5.
   </audio>
+
+  <!-- Imagen jumpscare, oculta al inicio -->
+  <img id="jumpscare-img" src="jumpscare.jpg" alt="Jumpscare" />
 
   <div class="container" id="form-container">
     <h2>Introduce la contraseña</h2>
@@ -104,7 +118,7 @@
 
   <script>
     const correctPassword = 'salamalecom';
-    let timeLeft = 60; // segundos
+    let timeLeft = 60;
     const timerElem = document.getElementById('timer');
     const passwordInput = document.getElementById('password');
     const submitBtn = document.getElementById('submitBtn');
@@ -112,12 +126,20 @@
     const musicBg = document.getElementById('music-bg');
     const jumpscareAudio = document.getElementById('jumpscare-audio');
     const formContainer = document.getElementById('form-container');
+    const jumpscareImg = document.getElementById('jumpscare-img');
 
     function disablePasswordForm() {
       passwordInput.disabled = true;
       submitBtn.disabled = true;
       formContainer.classList.add('debilitado');
       errorMsg.textContent = '¡Tiempo agotado!';
+    }
+
+    function showJumpscareImage() {
+      jumpscareImg.style.display = 'block';
+      setTimeout(() => {
+        jumpscareImg.style.display = 'none';
+      }, 3000);
     }
 
     // Contador regresivo
@@ -129,10 +151,11 @@
         disablePasswordForm();
         // Pausar la música de fondo
         musicBg.pause();
-        // Reproducir jumpscare
+        // Mostrar imagen y reproducir jumpscare
         jumpscareAudio.hidden = false;
         jumpscareAudio.currentTime = 0;
         jumpscareAudio.play();
+        showJumpscareImage();
         // Cuando termine el audio jumpscare, redirige
         jumpscareAudio.onended = function() {
           window.location.href = 'https://alfonsorv69.github.io/gato/';
