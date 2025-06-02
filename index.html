@@ -75,6 +75,22 @@
       pointer-events: none;
     }
 
+    #intro-image {
+      max-width: 300px;
+      max-height: 400px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      margin-bottom: 20px;
+      display: none;
+      z-index: 15;
+      user-select: none;
+    }
+
+    #intro-image.visible {
+      display: block;
+      opacity: 1;
+    }
+
     .footer-text {
       position: fixed;
       bottom: 10px;
@@ -168,29 +184,22 @@
 <body>
 
   <div id="start-screen">
+    <img
+      id="intro-image"
+      src="https://sportrenders.com/wp-content/uploads/2024/06/Yamal-Lamine-PNG-Barcelona-Football-Render.png"
+      alt="Intro Image"
+      draggable="false"
+    />
     <button id="start-button">Start</button>
   </div>
 
   <div id="main-content">
-    <div class="rainbow-text" id="gift-title">Your gift Laura</div>
+    <div class="rainbow-text">Your gift Laura</div>
     <mw-button raised id="btn1">1</mw-button>
     <mw-button raised id="btn2">2</mw-button>
     <mw-button raised id="btn3">3</mw-button>
     <mw-button raised id="btn4">4</mw-button>
   </div>
-
-  <img id="gift-image" src="https://em-content.zobj.net/source/google/263/turtle_1f422.png" 
-       alt="Gift Image" style="
-         display: none;
-         width: 120px;
-         position: absolute;
-         top: 20%;
-         z-index: 15;
-         left: 50%;
-         transform: translateX(-50%);
-         opacity: 0;
-         transition: opacity 0.5s ease;
-       " />
 
   <div class="footer-text">
     Made by: Monchito<br />
@@ -201,43 +210,34 @@
     window.addEventListener("DOMContentLoaded", () => {
       const startScreen = document.getElementById("start-screen");
       const mainContent = document.getElementById("main-content");
+      const startButton = document.getElementById("start-button");
+      const introImage = document.getElementById("intro-image");
 
       setTimeout(() => {
         startScreen.style.opacity = "1";
         startScreen.style.pointerEvents = "auto";
       }, 100);
 
-      document.getElementById("start-button").addEventListener("click", () => {
-        const startButton = document.getElementById("start-button");
+      startButton.addEventListener("click", () => {
         startButton.classList.add("disappear");
 
+        // Mostrar la imagen
+        introImage.classList.add("visible");
+
+        // Esperar 1 segundo
         setTimeout(() => {
+          // Ocultar pantalla de inicio
           startScreen.style.opacity = "0";
           startScreen.style.pointerEvents = "none";
+
+          // Mostrar contenido principal
           mainContent.classList.add("visible");
 
+          // Ocultar el start-screen completamente después de transición
           setTimeout(() => {
             startScreen.style.display = "none";
           }, 500);
-        }, 400);
-      });
-
-      // Mostrar imagen al hacer clic en el texto
-      const giftTitle = document.getElementById("gift-title");
-      const giftImage = document.getElementById("gift-image");
-
-      giftTitle.addEventListener("click", () => {
-        giftImage.style.display = "block";
-        setTimeout(() => {
-          giftImage.style.opacity = "1";
-        }, 10); // pequeño delay para activar transición
-
-        setTimeout(() => {
-          giftImage.style.opacity = "0";
-          setTimeout(() => {
-            giftImage.style.display = "none";
-          }, 500);
-        }, 1000); // mostrar 1 segundo
+        }, 1000);
       });
     });
 
@@ -272,3 +272,4 @@
 
 </body>
 </html>
+
