@@ -244,6 +244,7 @@
   <!-- Audio cargado desde el mismo directorio -->
   <audio id="turtle-sound" preload="auto">
     <source src="tortuga.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio HTML5.
   </audio>
 
   <!-- SPOTIFY BUTTON (OCULTO AL INICIO) -->
@@ -288,49 +289,55 @@
           }, 500);
         }, 1000);
       });
-    });
 
-    document.getElementById("btn1").addEventListener("click", () => {
-      window.location.href = 'sala1.html';
-    });
-    document.getElementById("btn2").addEventListener("click", () => {
-      window.location.href = 'male2.html';
-    });
-    document.getElementById("btn3").addEventListener("click", () => {
-      window.location.href = 'sala3.html';
-    });
-    document.getElementById("btn4").addEventListener("click", () => {
-      window.location.href = 'sala4.html';
-    });
+      // Sonido y tortuga animada
+      const giftText = document.getElementById('gift-text');
+      const turtleImage = document.getElementById('turtle-image');
+      const turtleSound = document.getElementById('turtle-sound');
 
-    const giftText = document.getElementById('gift-text');
-    const turtleImage = document.getElementById('turtle-image');
-    const turtleSound = document.getElementById('turtle-sound');
+      giftText.addEventListener('click', () => {
+        turtleImage.style.display = 'block';
+        // Reproducir sonido solo si está disponible
+        if (turtleSound) {
+          turtleSound.currentTime = 0;
+          turtleSound.play().catch(e => console.warn("No se pudo reproducir el sonido:", e));
+        }
 
-    giftText.addEventListener('click', () => {
-      turtleImage.style.display = 'block';
-      turtleSound.currentTime = 0;
-      turtleSound.play().catch(e => console.warn("No se pudo reproducir el sonido:", e));
+        setTimeout(() => {
+          turtleImage.style.display = 'none';
+        }, 6000); // Mostrar durante 6 segundos
+      });
 
-      setTimeout(() => {
-        turtleImage.style.display = 'none';
-      }, 6000); // Mostrar durante 6 segundos
+      // Botones de salas
+      document.getElementById("btn1").addEventListener("click", () => {
+        window.location.href = 'sala1.html';
+      });
+      document.getElementById("btn2").addEventListener("click", () => {
+        window.location.href = 'male2.html';
+      });
+      document.getElementById("btn3").addEventListener("click", () => {
+        window.location.href = 'sala3.html';
+      });
+      document.getElementById("btn4").addEventListener("click", () => {
+        window.location.href = 'sala4.html';
+      });
+
+      // Emojis animados
+      const emojis = ['🎉', '🎁', '🎂', '🥳', '✨'];
+      function createEmoji() {
+        const emoji = document.createElement('div');
+        emoji.classList.add('emoji');
+        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.left = Math.random() * window.innerWidth + 'px';
+        emoji.style.animationDuration = (window.innerWidth < 768 ? 4 : 7) + 's';
+        emoji.style.fontSize = (window.innerWidth < 768 ? 1.2 : 2.5) + 'rem';
+        emoji.style.top = '-50px';
+        document.body.appendChild(emoji);
+        setTimeout(() => emoji.remove(), 9000);
+      }
+
+      setInterval(createEmoji, window.innerWidth < 768 ? 500 : 250);
     });
-
-    const emojis = ['🎉', '🎁', '🎂', '🥳', '✨'];
-    function createEmoji() {
-      const emoji = document.createElement('div');
-      emoji.classList.add('emoji');
-      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-      emoji.style.left = Math.random() * window.innerWidth + 'px';
-      emoji.style.animationDuration = (window.innerWidth < 768 ? 4 : 7) + 's';
-      emoji.style.fontSize = (window.innerWidth < 768 ? 1.2 : 2.5) + 'rem';
-      emoji.style.top = '-50px';
-      document.body.appendChild(emoji);
-      setTimeout(() => emoji.remove(), 9000);
-    }
-
-    setInterval(createEmoji, window.innerWidth < 768 ? 500 : 250);
   </script>
 </body>
 </html>
