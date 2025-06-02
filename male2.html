@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Acceso con Contraseña</title>
-
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -66,32 +65,85 @@
     .back-btn:hover {
       background-color: #ddd;
     }
+    #timer {
+      font-weight: 900;
+      font-size: 1.3em;
+    }
+    .debilitado {
+      opacity: 0.6;
+      filter: blur(1px);
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
-
   <!-- Música de fondo con nombre correcto -->
-  <audio autoplay loop hidden>
+  <audio id="music-bg" autoplay loop hidden>
     <source src="lobby-classic-game.mp3" type="audio/mpeg">
     Tu navegador no soporta audio HTML5.
   </audio>
 
-  <div class="container">
+  <!-- Audio jumpscare, oculto al inicio -->
+  <audio id="jumpscare-audio" hidden>
+    <source src="scaryjumpscare.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio HTML5.
+  </audio>
+
+  <div class="container" id="form-container">
     <h2>Introduce la contraseña</h2>
+    <div>
+      <span>Tiempo restante: </span>
+      <span id="timer">60</span> segundos
+    </div>
     <input type="password" id="password" placeholder="Contraseña" />
     <button id="submitBtn">Entrar</button>
     <div class="error" id="errorMsg"></div>
-
     <!-- Botón para volver -->
     <button class="back-btn" onclick="window.location.href='https://alfonsorv69.github.io/gato/'">Volver</button>
   </div>
 
   <script>
-    const correctPassword = 'salamalecom'; // Cambia aquí la contraseña deseada
+    const correctPassword = 'salamalecom';
+    let timeLeft = 60; // segundos
+    const timerElem = document.getElementById('timer');
+    const passwordInput = document.getElementById('password');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    const musicBg = document.getElementById('music-bg');
+    const jumpscareAudio = document.getElementById('jumpscare-audio');
+    const formContainer = document.getElementById('form-container');
 
-    document.getElementById('submitBtn').addEventListener('click', () => {
-      const input = document.getElementById('password').value.trim();
-      const errorMsg = document.getElementById('errorMsg');
+    function disablePasswordForm() {
+      passwordInput.disabled = true;
+      submitBtn.disabled = true;
+      formContainer.classList.add('debilitado');
+      errorMsg.textContent = '¡Tiempo agotado!';
+    }
+
+    // Contador regresivo
+    const countdown = setInterval(() => {
+      timeLeft--;
+      timerElem.textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(countdown);
+        disablePasswordForm();
+        // Pausar la música de fondo
+        musicBg.pause();
+        // Reproducir jumpscare
+        jumpscareAudio.hidden = false;
+        jumpscareAudio.currentTime = 0;
+        jumpscareAudio.play();
+        // Cuando termine el audio jumpscare, redirige
+        jumpscareAudio.onended = function() {
+          window.location.href = 'https://alfonsorv69.github.io/gato/';
+        };
+      }
+    }, 1000);
+
+    // Validar contraseña
+    submitBtn.addEventListener('click', () => {
+      if (passwordInput.disabled) return;
+      const input = passwordInput.value.trim();
       if (input === correctPassword) {
         window.location.href = 'com3.html';
       } else {
@@ -99,9 +151,9 @@
       }
     });
 
-    document.getElementById('password').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        document.getElementById('submitBtn').click();
+    passwordInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !passwordInput.disabled) {
+        submitBtn.click();
       }
     });
   </script>
