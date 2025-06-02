@@ -1,53 +1,192 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Juego Gato</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>:D</title>
+  <script type="module" src="https://unpkg.com/@material/web@1.0.0/dist/material-web.min.js"></script>
   <style>
     body {
+      font-family: 'Roboto', sans-serif;
       margin: 0;
-      padding: 0;
       background: linear-gradient(135deg, #6750A4 0%, #B583F7 100%);
-      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      padding: 20px;
+      gap: 24px;
+      color: #fff;
+    }
+
+    #main-content {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 24px;
+      position: relative;
+    }
+
+    #main-content.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #start-screen {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.8s ease;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(20px);
+      background-color: rgba(0, 0, 0, 0.4);
+      display: flex;
       justify-content: center;
-      font-family: 'Roboto', sans-serif;
-      color: #fff;
+      align-items: center;
+      z-index: 10;
+      flex-direction: column;
     }
-    .main-container {
-      background: rgba(0,0,0,0.3);
-      padding: 32px 48px;
-      border-radius: 16px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.28);
-      text-align: center;
-      max-width: 350px;
-    }
-    h1 {
-      margin-top: 0;
-      margin-bottom: 24px;
-      font-size: 2.1em;
-      letter-spacing: 2px;
-    }
-    .start-btn {
+
+    #start-button {
+      font-size: 1.5rem;
+      padding: 16px 32px;
+      border: none;
+      border-radius: 12px;
       background-color: #FFB300;
       color: #000;
-      font-weight: 700;
-      font-size: 1.4rem;
-      border: none;
-      padding: 16px 0;
-      border-radius: 14px;
       cursor: pointer;
+      box-shadow: 0 6px 12px rgba(255, 179, 0, 0.5);
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      z-index: 11;
+    }
+
+    #start-button.disappear {
+      opacity: 0;
+      transform: scale(0.7);
+      pointer-events: none;
+    }
+
+    #start-image {
+      max-width: 300px;
+      width: 80vw;
+      display: none;
+      margin-bottom: 20px;
+      border-radius: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+      user-select: none;
+      pointer-events: none;
+      z-index: 12;
+    }
+
+    .footer-text {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      z-index: 20;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.85rem;
+      font-family: 'Roboto', sans-serif;
+      user-select: none;
+      line-height: 1.3;
+      white-space: nowrap;
+      text-shadow: 0 0 3px rgba(0,0,0,0.4);
+    }
+
+    .rainbow-text {
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+      animation: rainbow 6s linear infinite;
+      user-select: none;
+      text-align: center;
       width: 100%;
-      margin: 22px 0 10px 0;
-      transition: background-color 0.2s;
+      max-width: 400px;
+      margin-bottom: 10px;
+      z-index: 1;
+      cursor: pointer;
+      position: relative;
     }
-    .start-btn:hover {
-      background-color: #e6a300;
+
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 400% 50%; }
     }
-    /* Spotify floating button styles */
+
+    mw-button {
+      --md-sys-color-primary: #FFB300;
+      --md-sys-color-on-primary: #000000;
+      font-size: 2rem;
+      width: 80vw;
+      max-width: 300px;
+      height: 60px;
+      border-radius: 16px;
+      box-shadow: 0 6px 12px rgba(255, 179, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+      user-select: none;
+      cursor: pointer;
+      text-align: center;
+      z-index: 1;
+    }
+
+    mw-button:hover,
+    mw-button:focus {
+      box-shadow: 0 10px 20px rgba(255, 179, 0, 0.8);
+      transform: translateY(-2px);
+    }
+
+    mw-button:active {
+      box-shadow: 0 4px 8px rgba(255, 179, 0, 0.6);
+      transform: translateY(0);
+    }
+
+    .emoji {
+      position: fixed;
+      font-size: 2rem;
+      animation: fall linear infinite;
+      pointer-events: none;
+      z-index: 0;
+      user-select: none;
+      will-change: transform, opacity;
+    }
+
+    #turtle-image {
+      position: absolute;
+      top: -110px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: auto;
+      z-index: 5;
+      display: none;
+      user-select: none;
+      pointer-events: none;
+      filter: drop-shadow(0 0 4px rgba(0,0,0,0.7));
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ---------- SPOTIFY BUTTON ---------- */
     #spotify-float-btn {
       position: fixed;
       left: 20px;
@@ -58,12 +197,12 @@
       border-radius: 50%;
       box-shadow: 0 2px 8px rgba(0,0,0,0.25);
       background: none;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       padding: 0;
-      display: none; /* Oculto por defecto */
+      transition: opacity 0.3s;
     }
     #spotify-float-btn img {
       width: 100%;
@@ -71,16 +210,43 @@
       border-radius: 50%;
       display: block;
     }
+    /* ---------- END SPOTIFY BUTTON ---------- */
+
+    @media (max-width: 768px) {
+      .emoji {
+        font-size: 1.2rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="main-container">
-    <h1>Bienvenido al Juego del Gato</h1>
-    <p>¡Haz clic en Start para comenzar!</p>
-    <button class="start-btn" id="startBtn">Start</button>
+
+  <div id="start-screen">
+    <img id="start-image" src="https://sportrenders.com/wp-content/uploads/2024/06/Yamal-Lamine-PNG-Barcelona-Football-Render.png" alt="Yamal Lamine" />
+    <button id="start-button">Start</button>
   </div>
 
-  <!-- Botón flotante de Spotify, oculto por defecto -->
+  <div id="main-content">
+    <div class="rainbow-text" id="gift-text">Your gift Laura
+      <img id="turtle-image" src="https://em-content.zobj.net/source/google/263/turtle_1f422.png" alt="Tortuga" />
+    </div>
+    <mw-button raised id="btn1">1</mw-button>
+    <mw-button raised id="btn2">2</mw-button>
+    <mw-button raised id="btn3">3</mw-button>
+    <mw-button raised id="btn4">4</mw-button>
+  </div>
+
+  <div class="footer-text">
+    Made by: Monchito<br />
+    Hosted in: Github
+  </div>
+
+  <!-- Audio cargado desde el mismo directorio -->
+  <audio id="turtle-sound" preload="auto">
+    <source src="tortuga.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- SPOTIFY BUTTON (OCULTO AL INICIO) -->
   <a 
     href="https://open.spotify.com/playlist/4aHlSxHiTHMTEZuwzANK8T?pi=KqCbPfJLQLOsB"
     target="_blank"
@@ -89,13 +255,82 @@
   >
     <img src="spotifybutton.png" alt="Spotify Playlist"/>
   </a>
+  <!-- END SPOTIFY BUTTON -->
 
   <script>
-    document.getElementById('startBtn').addEventListener('click', function() {
-      // Mostrar el botón flotante de Spotify
-      document.getElementById('spotify-float-btn').style.display = 'flex';
-      // Aquí puedes poner el código para iniciar el juego o redirigir, si lo necesitas
+    window.addEventListener("DOMContentLoaded", () => {
+      const startScreen = document.getElementById("start-screen");
+      const mainContent = document.getElementById("main-content");
+      const startButton = document.getElementById("start-button");
+      const startImage = document.getElementById("start-image");
+      const spotifyBtn = document.getElementById("spotify-float-btn");
+
+      setTimeout(() => {
+        startScreen.style.opacity = "1";
+        startScreen.style.pointerEvents = "auto";
+      }, 100);
+
+      startButton.addEventListener("click", () => {
+        // Mostrar imagen
+        startButton.style.display = "none";
+        startImage.style.display = "block";
+
+        // Esperar 1 segundo y luego iniciar
+        setTimeout(() => {
+          startImage.style.display = "none";
+          startScreen.style.opacity = "0";
+          startScreen.style.pointerEvents = "none";
+          mainContent.classList.add("visible");
+          spotifyBtn.style.display = "flex"; // <-- Muestra el botón de Spotify
+
+          setTimeout(() => {
+            startScreen.style.display = "none";
+          }, 500);
+        }, 1000);
+      });
     });
+
+    document.getElementById("btn1").addEventListener("click", () => {
+      window.location.href = 'sala1.html';
+    });
+    document.getElementById("btn2").addEventListener("click", () => {
+      window.location.href = 'male2.html';
+    });
+    document.getElementById("btn3").addEventListener("click", () => {
+      window.location.href = 'sala3.html';
+    });
+    document.getElementById("btn4").addEventListener("click", () => {
+      window.location.href = 'sala4.html';
+    });
+
+    const giftText = document.getElementById('gift-text');
+    const turtleImage = document.getElementById('turtle-image');
+    const turtleSound = document.getElementById('turtle-sound');
+
+    giftText.addEventListener('click', () => {
+      turtleImage.style.display = 'block';
+      turtleSound.currentTime = 0;
+      turtleSound.play().catch(e => console.warn("No se pudo reproducir el sonido:", e));
+
+      setTimeout(() => {
+        turtleImage.style.display = 'none';
+      }, 6000); // Mostrar durante 6 segundos
+    });
+
+    const emojis = ['🎉', '🎁', '🎂', '🥳', '✨'];
+    function createEmoji() {
+      const emoji = document.createElement('div');
+      emoji.classList.add('emoji');
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * window.innerWidth + 'px';
+      emoji.style.animationDuration = (window.innerWidth < 768 ? 4 : 7) + 's';
+      emoji.style.fontSize = (window.innerWidth < 768 ? 1.2 : 2.5) + 'rem';
+      emoji.style.top = '-50px';
+      document.body.appendChild(emoji);
+      setTimeout(() => emoji.remove(), 9000);
+    }
+
+    setInterval(createEmoji, window.innerWidth < 768 ? 500 : 250);
   </script>
 </body>
 </html>
