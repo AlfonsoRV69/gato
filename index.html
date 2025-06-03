@@ -212,6 +212,23 @@
     }
     /* ---------- END SPOTIFY BUTTON ---------- */
 
+    /* ---------- BOTÓN SECRETO ---------- */
+    #btn-secreto {
+      --md-sys-color-primary: transparent;
+      --md-sys-color-on-primary: transparent;
+      width: 80vw;
+      max-width: 300px;
+      height: 12px; /* Aumentado de 10px a 12px (20% más) */
+      margin-top: -12px; /* Ajustado de -15px a -12px */
+      opacity: 0.2;
+      transition: opacity 0.3s;
+    }
+    
+    #btn-secreto:hover {
+      opacity: 0.5;
+    }
+    /* ---------- END BOTÓN SECRETO ---------- */
+
     @media (max-width: 768px) {
       .emoji {
         font-size: 1.2rem;
@@ -234,6 +251,7 @@
     <mw-button raised id="btn2">2</mw-button>
     <mw-button raised id="btn3">3</mw-button>
     <mw-button raised id="btn4">4</mw-button>
+    <mw-button raised id="btn-secreto"></mw-button>
   </div>
 
   <div class="footer-text">
@@ -319,6 +337,9 @@
       });
       document.getElementById("btn4").addEventListener("click", () => {
         window.location.href = 'sala4.html';
+      });
+      document.getElementById("btn-secreto").addEventListener("click", () => {
+        window.location.href = 'secreto.html'; // Cambia esto por la URL que desees
       });
 
       // Emojis animados
