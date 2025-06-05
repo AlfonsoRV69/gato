@@ -51,16 +51,62 @@
       bottom: 0;
       width: 220px;
       height: 330px;
-      z-index: 2;
+      z-index: 3;
       will-change: transform, filter;
       margin-bottom: 0;
       margin-top: 10px;
       filter: drop-shadow(0 4px 18px #000c) drop-shadow(0 0px 10px #fff6);
-      /* La animación se hará con JS para el ritmo */
+      transition: filter 0.2s;
+    }
+    .paused-glow {
+      filter: grayscale(0.5) blur(2px) drop-shadow(0 0 30px #888e) !important;
+    }
+    /* Spotlights */
+    .lights {
+      position: absolute;
+      left: 50%;
+      bottom: 70px;
+      width: 380px;
+      height: 220px;
+      pointer-events: none;
+      z-index: 2;
+      transform: translateX(-50%);
+    }
+    .light {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.7;
+      filter: blur(22px);
+      animation: lightPulse 2s infinite alternate;
+      mix-blend-mode: lighten;
+    }
+    .light.l1 { left: 28px;  top: 90px; width: 110px; height: 44px; background: #fff777; animation-delay: 0s;}
+    .light.l2 { left: 200px; top: 110px; width: 100px; height: 42px; background: #ff49d3; animation-delay: 0.5s;}
+    .light.l3 { left: 150px; top: 20px; width: 140px; height: 58px; background: #00d9ff; animation-delay: 1.0s;}
+    .light.l4 { left: 100px; top: 150px;width: 90px; height: 36px; background: #fff; animation-delay: 0.7s;}
+    @keyframes lightPulse {
+      0% { opacity: 0.5; filter: blur(30px) brightness(1);}
+      50% { opacity: 1; filter: blur(12px) brightness(2.5);}
+      100% { opacity: 0.7; filter: blur(26px) brightness(1.7);}
+    }
+    /* Flash sincronizado con el beat */
+    .flash-beat {
+      position: absolute;
+      left: 0; top: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.21) 0%,rgba(255,255,255,0) 65%);
+      opacity: 0;
+      z-index: 10;
+      transition: opacity 0.14s;
+    }
+    .flash-beat.active {
+      opacity: 1;
+      transition: opacity 0.07s;
     }
     @media (max-width: 600px) {
       .stage-container { height: 38vh; }
       .tommy-cash { width: 120px; height: 180px;}
+      .lights { width: 170px; height: 120px;}
     }
   </style>
 </head>
@@ -68,13 +114,18 @@
   <div class="overlay"></div>
   <h1>Eurovision Espresso Machiato 🎤✨</h1>
   <div class="audio-container">
-    <audio id="audio" autoplay>
+    <audio id="audio" controls>
       <source src="espresso-machiato.mp3" type="audio/mp3">
-      <!-- BACKUP: YouTube embed, but JS sync won't work with iframe. -->
       Your browser does not support the audio element.
     </audio>
   </div>
   <div class="stage-container">
+    <div class="lights" id="lights">
+      <div class="light l1"></div>
+      <div class="light l2"></div>
+      <div class="light l3"></div>
+      <div class="light l4"></div>
+    </div>
     <img 
       src="https://i.imgur.com/8lxBW41.png"
       alt="Tommy Cash bailando" 
@@ -83,73 +134,96 @@
       oncontextmenu="return false;"
       id="tommy"
     >
+    <div class="flash-beat" id="flash"></div>
   </div>
   <script>
     // --- CONFIGURACIÓN DE RITMO ---
-    // El tempo de "Espresso Machiato" es de aproximadamente 125 BPM.
-    // Eso es un beat cada 0.48 segundos.
     const BPM = 125;
     const BEAT_INTERVAL = 60 / BPM; // segundos por beat (~0.48s)
-    // Puedes ajustar este array para cambiar el patrón de baile por beat.
-    // Cada entrada es un "frame" de pose por beat.
+
+    // Patrón de baile más exagerado y variado (más saltos, giros, zoom, etc.)
     const DANCE_PATTERN = [
-      // [x%, salto(px), rot(deg), zoom, skew(deg)]
-      [50, 0,    0,   1.0, 0],   // centro, normal
-      [44, 42, -12,   1.18, 8],  // izquierda, salto con giro y skew
-      [56, 0,   10,   1.1, -8],  // derecha, bajo con giro
-      [50, 34,  -8,   1.16, 3],  // centro, salto medio
-      [56, 0,   12,   1.13, -6], // derecha, bajo con giro
-      [44, 42, -10,   1.21, 7],  // izquierda, salto con giro y skew
-      [50, 0,    0,   1.0, 0],   // centro, normal
-      [54, 36,   8,   1.13, -4], // derecha, salto
-      [46, 10,  -8,   1.06, 4],  // izquierda, leve salto
-      [50, 0,    0,   1.0, 0],   // centro, normal
+      [50, 0,    0,   1.1, 0],    // centro, normal
+      [40, 68, -32,   1.27, 18],  // extrema izq, salto grande y giro
+      [60, 0,   29,   1.18, -20], // extrema der., bajada con giro fuerte
+      [50, 54, -20,   1.22, 6],   // centro, salto alto y skew
+      [62, 0,   38,   1.24, -23], // extrema der., giro extremo, bajada
+      [38, 70, -36,   1.32, 21],  // extrema izq, salto máximo y giro
+      [50, 0,    0,   1.11, 0],   // centro, normal
+      [55, 41,  29,   1.19, -10], // derecha, salto medio
+      [45, 15, -22,   1.12, 11],  // izquierda, leve salto
+      [50, 0,    0,   1.1, 0],    // centro, normal
+      [50, 120, 0,   1.45, 0],    // salto vertical enorme (efecto wow)
+      [50, 0,    0,   1.1, 0],    // centro
     ];
 
     const audio = document.getElementById('audio');
     const tommy = document.getElementById('tommy');
-    let lastBeat = 0;
+    const flash = document.getElementById('flash');
+    let lastBeat = -1;
+    let lastTime = 0;
     let patternIndex = 0;
-    let lastAudioTime = 0;
+    let dancing = false;
 
-    // Sincroniza con el beat del audio
     function animateTommy() {
-      if (!audio.paused && !audio.ended) {
-        const t = audio.currentTime;
-        // Calcula en qué beat estamos
-        const beat = Math.floor(t / BEAT_INTERVAL);
-        if (beat !== lastBeat) {
-          // Cambia de pose al siguiente beat
-          lastBeat = beat;
-          patternIndex = (patternIndex + 1) % DANCE_PATTERN.length;
-        }
-        // Interpolación entre poses para suavizar
-        const frac = (t % BEAT_INTERVAL) / BEAT_INTERVAL;
-        const curr = DANCE_PATTERN[patternIndex];
-        const next = DANCE_PATTERN[(patternIndex + 1) % DANCE_PATTERN.length];
-        // Interpolamos cada valor
-        const x = curr[0] + (next[0] - curr[0]) * frac;
-        const y = curr[1] + (next[1] - curr[1]) * frac;
-        const rot = curr[2] + (next[2] - curr[2]) * frac;
-        const zoom = curr[3] + (next[3] - curr[3]) * frac;
-        const skew = curr[4] + (next[4] - curr[4]) * frac;
-        tommy.style.left = x + "%";
-        tommy.style.bottom = y + "px";
-        tommy.style.transform =
-          `translate(-50%,0) scale(${zoom},${0.98 + Math.abs(Math.sin(t*1.3))*0.07}) rotate(${rot}deg) skewX(${skew}deg)`;
+      if (audio.paused || audio.ended) {
+        tommy.classList.add('paused-glow');
+        requestAnimationFrame(animateTommy);
+        return;
       }
+      tommy.classList.remove('paused-glow');
+      const t = audio.currentTime;
+      // En qué beat estamos, incluyendo decimales
+      const beatFloat = t / BEAT_INTERVAL;
+      const beat = Math.floor(beatFloat);
+
+      // Efecto flash rápido exactamente en cada beat
+      if (beat !== lastBeat) {
+        flash.classList.add('active');
+        setTimeout(() => flash.classList.remove('active'), 90);
+        patternIndex = (patternIndex + 1) % DANCE_PATTERN.length;
+        lastBeat = beat;
+      }
+
+      // Interpolación para suavizar la transición entre poses
+      const frac = (beatFloat % 1);
+      const curr = DANCE_PATTERN[patternIndex];
+      const next = DANCE_PATTERN[(patternIndex + 1) % DANCE_PATTERN.length];
+
+      // Interpolamos cada valor (más exagerado y rápido)
+      const lerp = (a, b, f) => a + (b - a) * f;
+      const x = lerp(curr[0], next[0], frac);
+      const y = lerp(curr[1], next[1], frac);
+      const rot = lerp(curr[2], next[2], frac);
+      const zoom = lerp(curr[3], next[3], frac);
+      const skew = lerp(curr[4], next[4], frac);
+
+      tommy.style.left = x + "%";
+      tommy.style.bottom = y + "px";
+      tommy.style.transform =
+        `translate(-50%,0) scale(${zoom},${1.08 + Math.abs(Math.sin(t*2.1))*0.15}) rotate(${rot}deg) skewX(${skew}deg)`;
+
       requestAnimationFrame(animateTommy);
     }
 
-    // Espera a que el usuario interactúe para autoplay (por políticas del navegador)
+    // Controla el baile según el audio
+    function updateDancing() {
+      if (!audio.paused && !audio.ended) {
+        animateTommy();
+      }
+    }
+
+    // Espera interacción para permitir reproducir audio (políticas de navegador)
     window.addEventListener('click', () => { audio.play(); }, { once: true });
     window.addEventListener('keydown', () => { audio.play(); }, { once: true });
 
-    audio.addEventListener('play', () => {
-      animateTommy();
-    });
-    // Si el audio ya está autoplay, empieza igual
-    if (!audio.paused) animateTommy();
+    audio.addEventListener('play', updateDancing);
+    audio.addEventListener('pause', () => { tommy.classList.add('paused-glow'); });
+    audio.addEventListener('ended', () => { tommy.classList.add('paused-glow'); });
+
+    // Si el audio ya está sonando, inicia animación igual
+    if (!audio.paused) updateDancing();
+    else tommy.classList.add('paused-glow');
   </script>
 </body>
 </html>
