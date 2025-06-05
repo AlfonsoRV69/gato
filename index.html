@@ -247,11 +247,12 @@
     <div class="rainbow-text" id="gift-text">Your gift Laura
       <img id="turtle-image" src="https://em-content.zobj.net/source/google/263/turtle_1f422.png" alt="Tortuga" />
     </div>
-    <mw-button raised id="btn1">1</mw-button>
-    <mw-button raised id="btn2">2</mw-button>
-    <mw-button raised id="btn3">3</mw-button>
-    <mw-button raised id="btn4">4</mw-button>
-    <mw-button raised id="btn-secreto"></mw-button>
+    <mw-button raised id="btn1">🐱</mw-button>
+<mw-button raised id="btn2">🎲</mw-button>
+<mw-button raised id="btn3">🎨</mw-button>
+<mw-button raised id="btn4">🎶</mw-button>
+<mw-button raised id="btn-expreso">☕</mw-button> <!-- Nuevo botón para expreso.html -->
+<mw-button raised id="btn-secreto"></mw-button>
   </div>
 
   <div class="footer-text">
@@ -340,6 +341,9 @@
       });
       document.getElementById("btn-secreto").addEventListener("click", () => {
         window.location.href = 'secreto.html'; // Cambia esto por la URL que desees
+      });
+      document.getElementById("btn-expreso").addEventListener("click", () => {
+  window.location.href = 'expreso.html';
       });
 
       // Emojis animados
