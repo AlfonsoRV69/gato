@@ -135,6 +135,12 @@
       id="tommy"
     >
     <div class="flash-beat" id="flash"></div>
+      <img 
+    src="https://i.gifer.com/origin/a0/a07ad08920f303f655251b1a0b353b86_w200.gif"
+    alt="Explosión"
+    id="explosion"
+    style="display:none; position:absolute; left:50%; bottom:110px; width:340px; transform:translateX(-50%); z-index:30; pointer-events:none;"
+  >
   </div>
   <script>
     // --- CONFIGURACIÓN DE RITMO ---
@@ -224,6 +230,31 @@
     // Si el audio ya está sonando, inicia animación igual
     if (!audio.paused) updateDancing();
     else tommy.classList.add('paused-glow');
+    // Explosión animada en los últimos 3 segundos
+const explosion = document.getElementById('explosion');
+let explosionShown = false;
+
+function checkExplosion() {
+  if (audio.duration) {
+    if (audio.currentTime >= audio.duration - 3 && !explosionShown) {
+      explosion.style.display = 'block';
+      explosionShown = true;
+    }
+    if (audio.currentTime < audio.duration - 3 && explosionShown) {
+      explosion.style.display = 'none';
+      explosionShown = false;
+    }
+  }
+  requestAnimationFrame(checkExplosion);
+}
+
+audio.addEventListener('play', () => {
+  requestAnimationFrame(checkExplosion);
+});
+audio.addEventListener('ended', () => {
+  explosion.style.display = 'none';
+  explosionShown = false;
+});
   </script>
 </body>
 </html>
