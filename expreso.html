@@ -254,6 +254,7 @@ audio.addEventListener('play', () => {
 audio.addEventListener('ended', () => {
   explosion.style.display = 'none';
   explosionShown = false;
+  audio.currentTime =0;
 });
   </script>
 </body>
