@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Espresso Machiato Eurovision Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: url('https://pix.eurovisionworld.com/pix/eurovision-2025-stage.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+      overflow-x: hidden;
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.42);
+      z-index: 0;
+    }
+    h1 {
+      color: #fff;
+      margin-top: 35px;
+      font-size: 2.3em;
+      letter-spacing: 1px;
+      text-shadow: 2px 2px 8px #222, 0 2px 4px #b18b57aa;
+      z-index: 2;
+      position: relative;
+    }
+    .audio-container {
+      margin: 10px 0 15px 0;
+      z-index: 2;
+      position: relative;
+    }
+    .stage-container {
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: end;
+      height: 65vh;
+      min-height: 350px;
+      position: relative;
+      z-index: 2;
+      overflow: visible;
+    }
+    .tommy-cash {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 220px;
+      height: 330px;
+      z-index: 2;
+      will-change: transform, filter;
+      margin-bottom: 0;
+      margin-top: 10px;
+      filter: drop-shadow(0 4px 18px #000c) drop-shadow(0 0px 10px #fff6);
+      /* La animación se hará con JS para el ritmo */
+    }
+    @media (max-width: 600px) {
+      .stage-container { height: 38vh; }
+      .tommy-cash { width: 120px; height: 180px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <h1>Eurovision Espresso Machiato 🎤✨</h1>
+  <div class="audio-container">
+    <audio id="audio" autoplay>
+      <source src="/espresso-machiato.mp3" type="audio/mp3">
+      <!-- BACKUP: YouTube embed, but JS sync won't work with iframe. -->
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+  <div class="stage-container">
+    <img 
+      src="https://i.imgur.com/8lxBW41.png"
+      alt="Tommy Cash bailando" 
+      class="tommy-cash"
+      draggable="false"
+      oncontextmenu="return false;"
+      id="tommy"
+    >
+  </div>
+  <script>
+    // --- CONFIGURACIÓN DE RITMO ---
+    // El tempo de "Espresso Machiato" es de aproximadamente 125 BPM.
+    // Eso es un beat cada 0.48 segundos.
+    const BPM = 125;
+    const BEAT_INTERVAL = 60 / BPM; // segundos por beat (~0.48s)
+    // Puedes ajustar este array para cambiar el patrón de baile por beat.
+    // Cada entrada es un "frame" de pose por beat.
+    const DANCE_PATTERN = [
+      // [x%, salto(px), rot(deg), zoom, skew(deg)]
+      [50, 0,    0,   1.0, 0],   // centro, normal
+      [44, 42, -12,   1.18, 8],  // izquierda, salto con giro y skew
+      [56, 0,   10,   1.1, -8],  // derecha, bajo con giro
+      [50, 34,  -8,   1.16, 3],  // centro, salto medio
+      [56, 0,   12,   1.13, -6], // derecha, bajo con giro
+      [44, 42, -10,   1.21, 7],  // izquierda, salto con giro y skew
+      [50, 0,    0,   1.0, 0],   // centro, normal
+      [54, 36,   8,   1.13, -4], // derecha, salto
+      [46, 10,  -8,   1.06, 4],  // izquierda, leve salto
+      [50, 0,    0,   1.0, 0],   // centro, normal
+    ];
+
+    const audio = document.getElementById('audio');
+    const tommy = document.getElementById('tommy');
+    let lastBeat = 0;
+    let patternIndex = 0;
+    let lastAudioTime = 0;
+
+    // Sincroniza con el beat del audio
+    function animateTommy() {
+      if (!audio.paused && !audio.ended) {
+        const t = audio.currentTime;
+        // Calcula en qué beat estamos
+        const beat = Math.floor(t / BEAT_INTERVAL);
+        if (beat !== lastBeat) {
+          // Cambia de pose al siguiente beat
+          lastBeat = beat;
+          patternIndex = (patternIndex + 1) % DANCE_PATTERN.length;
+        }
+        // Interpolación entre poses para suavizar
+        const frac = (t % BEAT_INTERVAL) / BEAT_INTERVAL;
+        const curr = DANCE_PATTERN[patternIndex];
+        const next = DANCE_PATTERN[(patternIndex + 1) % DANCE_PATTERN.length];
+        // Interpolamos cada valor
+        const x = curr[0] + (next[0] - curr[0]) * frac;
+        const y = curr[1] + (next[1] - curr[1]) * frac;
+        const rot = curr[2] + (next[2] - curr[2]) * frac;
+        const zoom = curr[3] + (next[3] - curr[3]) * frac;
+        const skew = curr[4] + (next[4] - curr[4]) * frac;
+        tommy.style.left = x + "%";
+        tommy.style.bottom = y + "px";
+        tommy.style.transform =
+          `translate(-50%,0) scale(${zoom},${0.98 + Math.abs(Math.sin(t*1.3))*0.07}) rotate(${rot}deg) skewX(${skew}deg)`;
+      }
+      requestAnimationFrame(animateTommy);
+    }
+
+    // Espera a que el usuario interactúe para autoplay (por políticas del navegador)
+    window.addEventListener('click', () => { audio.play(); }, { once: true });
+    window.addEventListener('keydown', () => { audio.play(); }, { once: true });
+
+    audio.addEventListener('play', () => {
+      animateTommy();
+    });
+    // Si el audio ya está autoplay, empieza igual
+    if (!audio.paused) animateTommy();
+  </script>
+</body>
+</html>
